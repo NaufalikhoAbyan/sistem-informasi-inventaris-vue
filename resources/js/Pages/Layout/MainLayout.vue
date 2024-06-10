@@ -10,25 +10,25 @@
                 </div>
             </div>
             <div class="line"></div>
-            <Link href="/" class="w-full flex items-center gap-2 menu-active" id="dashboard">
+            <Link :href="route('home')" class="w-full flex items-center gap-2 opacity-50" id="dashboard" :class="{ 'opacity-100': route().current('home')}">
                 <img src="/images/dashboard_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Dashboard</p>
             </Link>
             <div class="line"></div>
             <p class="opacity-50">Manajemen</p>
-            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barang">
+            <Link :href="route('test')" class="w-full flex items-center gap-2 opacity-50 mt-8" id="kategori" :class="{ 'menu-active': route().current('category.*')}">
                 <img src="/images/kategori_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Kategori</p>
             </Link>
-            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barangMasuk">
-                <img src="/images/kategori_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
+            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barang" :class="{ 'menu-active': route().current('item.*') }">
+                <img src="/images/barang_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Barang</p>
             </Link>
-            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barangKeluar">
+            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barangMasuk" :class="{ 'menu-active': route().current('item-in.*') }">
                 <img src="/images/barang_masuk_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Barang Masuk</p>
             </Link>
-            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8">
+            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barangKeluar" :class="{ 'menu-active': route().current('item-out.*') }">
                 <img src="/images/barang_keluar_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Barang Keluar</p>
             </Link>
@@ -39,7 +39,7 @@
                     <input type="text" placeholder="search for..." class="flex-grow bg-admin-gray py-1.5 px-3 rounded-l-lg focus:border-2 focus:border-blue-200">
                     <div class="w-10 h-full bg-primary flex items-center justify-center">
                         <img src="/images/search_icon.svg" alt="search" class="w-3.5">
-                    </div>
+                    </div>`
                 </div>
                 <div class="flex h-full items-center">
                     <div class="flex gap-8">
@@ -66,4 +66,10 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3'
+
+let links = ["dashboard", "kategori", "barang", "barangMasuk", "barangKeluar"];
+
+function activeMenu (link) {
+
+}
 </script>
