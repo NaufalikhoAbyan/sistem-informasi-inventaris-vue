@@ -10,25 +10,25 @@
                 </div>
             </div>
             <div class="line"></div>
-            <Link :href="route('home')" class="w-full flex items-center gap-2 opacity-50" id="dashboard" :class="{ 'opacity-100': route().current('home')}">
+            <Link :href="route('dashboard')" class="w-full flex items-center gap-2" id="dashboard" :class="[ route().current('dashboard') ? 'opacity-100' : 'opacity-50' ]">
                 <img src="/images/dashboard_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Dashboard</p>
             </Link>
             <div class="line"></div>
             <p class="opacity-50">Manajemen</p>
-            <Link :href="route('test')" class="w-full flex items-center gap-2 opacity-50 mt-8" id="kategori" :class="{ 'menu-active': route().current('category.*')}">
+            <Link :href="route('category.index')" class="w-full flex items-center gap-2 mt-8" id="kategori" :class="[ route().current('category.*') ? 'opacity-100' : 'opacity-50' ]">
                 <img src="/images/kategori_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Kategori</p>
             </Link>
-            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barang" :class="{ 'menu-active': route().current('item.*') }">
+            <Link :href="route('item.index')" class="w-full flex items-center gap-2 mt-8" id="barang" :class="[ route().current('item.*') ? 'opacity-100' : 'opacity-50' ]">
                 <img src="/images/barang_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Barang</p>
             </Link>
-            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barangMasuk" :class="{ 'menu-active': route().current('item-in.*') }">
+            <Link :href="route('item-in.index')" class="w-full flex items-center gap-2 mt-8" id="barangMasuk" :class="[ route().current('item-in.*') ? 'opacity-100' : 'opacity-50' ]">
                 <img src="/images/barang_masuk_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Barang Masuk</p>
             </Link>
-            <Link href="" class="w-full flex items-center gap-2 opacity-50 mt-8" id="barangKeluar" :class="{ 'menu-active': route().current('item-out.*') }">
+            <Link :href="route('item-out.index')" class="w-full flex items-center gap-2 mt-8" id="barangKeluar" :class="[ route().current('item-out.*') ? 'opacity-100' : 'opacity-50' ]">
                 <img src="/images/barang_keluar_icon.svg" alt="dashboard icon" class="h-3.5 w-3.5">
                 <p class="font-bold text-sm">Barang Keluar</p>
             </Link>
@@ -37,7 +37,7 @@
             <div class="w-full shadow-lg h-[70px] py-2 px-8 flex items-center justify-between">
                 <div class="w-[400px] h-[38px] rounded-md overflow-hidden flex">
                     <input type="text" placeholder="search for..." class="flex-grow bg-admin-gray py-1.5 px-3 rounded-l-lg focus:border-2 focus:border-blue-200">
-                    <div class="w-10 h-full bg-primary flex items-center justify-center">
+                    <div class="w-10 h-full bg-primary rounded-r-lg flex items-center justify-center">
                         <img src="/images/search_icon.svg" alt="search" class="w-3.5">
                     </div>`
                 </div>
@@ -47,11 +47,14 @@
                         <img src="/images/mail_icon.svg" alt="mail" class="opacity-25 w-4">
                     </div>
                     <div class="bg-black opacity-15 h-3/4 w-[2px] mx-4"></div>
-                    <div class="flex items-center gap-4">
-                        <p>ICamelot</p>
+                    <div class="flex items-center gap-4" @click="isDroppedDown = !isDroppedDown">
+                        <p>{{user.name}}</p>
                         <div class="w-8 aspect-square rounded-full">
                             <img src="/images/undraw_profile.svg" alt="profile" class="w-full h-full">
                         </div>
+                    </div>
+                    <div v-if="isDroppedDown" class="bg-white px-4 py-2 rounded-lg border-2 cursor-pointer absolute z-50 right-10 top-16 hover:text-admin-danger">
+                        <Link :href="route('logout')" method="POST">Logout</Link>
                     </div>
                 </div>
             </div>
@@ -65,11 +68,12 @@
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
+import { computed, ref } from 'vue'
 
-let links = ["dashboard", "kategori", "barang", "barangMasuk", "barangKeluar"];
+const page = usePage()
 
-function activeMenu (link) {
+const user = computed(() => page.props.auth.user)
 
-}
+const isDroppedDown = ref(false)
 </script>

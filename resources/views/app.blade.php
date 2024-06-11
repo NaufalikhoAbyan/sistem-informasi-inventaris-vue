@@ -14,7 +14,7 @@
     @inertiaHead
     <title>Sistem Inventaris</title>
 </head>
-<body>
+<body class="font-nunito">
     @inertia
 </body>
 </html>
