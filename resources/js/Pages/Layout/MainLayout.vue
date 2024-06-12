@@ -34,13 +34,7 @@
             </Link>
         </div>
         <div class="flex-grow flex flex-col">
-            <div class="w-full shadow-lg h-[70px] py-2 px-8 flex items-center justify-between">
-                <div class="w-[400px] h-[38px] rounded-md overflow-hidden flex">
-                    <input type="text" placeholder="search for..." class="flex-grow bg-admin-gray py-1.5 px-3 rounded-l-lg focus:border-2 focus:border-blue-200">
-                    <div class="w-10 h-full bg-primary rounded-r-lg flex items-center justify-center">
-                        <img src="/images/search_icon.svg" alt="search" class="w-3.5">
-                    </div>`
-                </div>
+            <div class="w-full shadow-lg h-[70px] py-2 px-8 flex items-center justify-end">
                 <div class="flex h-full items-center">
                     <div class="flex gap-8">
                         <img src="/images/bell_icon.svg" alt="notification" class="opacity-25 w-4">

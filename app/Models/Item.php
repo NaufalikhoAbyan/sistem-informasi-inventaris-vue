@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * @method static create(array $validate)
  * @method static find(mixed $item_id)
+ * @method static filters(array $filters)
  */
 class Item extends Model
 {
@@ -45,5 +47,16 @@ class Item extends Model
     public function itemImage(): HasOne
     {
         return $this->hasOne(ItemImage::class);
+    }
+
+    public function scopeFilters(Builder $query, array $filters): Builder
+    {
+        if(isset($filters['search'])){
+            $query
+                ->where('brand', 'like', '%'.$filters['search'].'%')
+                ->orWhere('series', 'like', '%'.$filters['search'].'%')
+                ->orWhere('specification', 'like', '%'.$filters['search'].'%');
+        }
+        return $query;
     }
 }

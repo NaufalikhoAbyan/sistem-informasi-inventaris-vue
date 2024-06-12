@@ -15,10 +15,14 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $filters = [
+            'search' => $request->string('search')
+        ];
         return inertia('Barang/Index', [
-            'items' => Item::all()->load('category')->load('itemImage')
+            'items' => Item::filters($filters)->with(['category', 'itemImage'])->get(),
+            'filters' => $filters,
         ]);
     }
 
