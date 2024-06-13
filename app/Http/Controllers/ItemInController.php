@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\ItemIn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ItemInController extends Controller
 {
@@ -38,8 +39,15 @@ class ItemInController extends Controller
             'in_quantity' => ['integer', 'min:0', 'required'],
             'item_id' => ['integer', 'required']
         ]);
-        ItemIn::create($data);
+        DB::beginTransaction();
+        try {
+            ItemIn::create($data);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
 
+        DB::commit();
         return redirect()->route('item-in.index');
     }
 

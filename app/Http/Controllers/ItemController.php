@@ -8,6 +8,7 @@ use App\Models\ItemImage;
 use App\Models\ItemIn;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
@@ -49,28 +50,35 @@ class ItemController extends Controller
             'stock' => ['integer', 'min:0', 'required'],
             'category_id' => ['integer', 'required'],
         ]);
-        $newItem = Item::create([
-            'brand' => $request->brand,
-            'series' => $request->series,
-            'specification' => $request->specification,
-            'stock' => 0,
-            'category_id' => $request->category_id,
-        ]);
-        if ($request->stock > 0) {
-            ItemIn::create([
-                'in_date' => date('Y-m-d'),
-                'in_quantity' => $request->stock,
-                'item_id' => $newItem->id,
+        DB::beginTransaction();
+        try {
+            $newItem = Item::create([
+                'brand' => $request->brand,
+                'series' => $request->series,
+                'specification' => $request->specification,
+                'stock' => 0,
+                'category_id' => $request->category_id,
             ]);
-        }
-        if($request->hasFile('image')){
-            $request->image->store('images', 'public');
-            ItemImage::create([
-                'filename' => $request->file('image')->hashName(),
-                'item_id' => $newItem->id,
-            ]);
+            if ($request->stock > 0) {
+                ItemIn::create([
+                    'in_date' => date('Y-m-d'),
+                    'in_quantity' => $request->stock,
+                    'item_id' => $newItem->id,
+                ]);
+            }
+            if($request->hasFile('image')){
+                $request->image->store('images', 'public');
+                ItemImage::create([
+                    'filename' => $request->file('image')->hashName(),
+                    'item_id' => $newItem->id,
+                ]);
+            }
+        } catch (Exception $e){
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
 
+        DB::commit();
         return redirect()->route('item.index');
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\ItemOut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ItemOutController extends Controller
 {
@@ -38,14 +39,21 @@ class ItemOutController extends Controller
             'out_quantity' => ['integer', 'min:0', 'required'],
             'item_id' => ['integer', 'required']
         ]);
-        $item = Item::find($data['item_id']);
-        if ($item->itemInLatest->first()['in_date'] > $data['out_date']) {
-            return redirect()->back()->withErrors(['error' => 'The date cannot be less than the latest Item In date']);
+        DB::beginTransaction();
+        try {
+            $item = Item::find($data['item_id']);
+            if ($item->itemInLatest->first()['in_date'] > $data['out_date']) {
+                return redirect()->back()->withErrors(['error' => 'The date cannot be less than the latest Item In date']);
+            }
+            if ($item['stock'] - $data['out_quantity'] < 0) {
+                return redirect()->back()->withErrors(['error' => 'The value of item quantity will result in less than zero']);
+            }
+            ItemOut::create($data);
+        } catch (\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
-        if ($item['stock'] - $data['out_quantity'] < 0) {
-            return redirect()->back()->withErrors(['error' => 'The value of item quantity will result in less than zero']);
-        }
-        ItemOut::create($data);
+        DB::commit();
         return redirect()->route('item-out.index');
     }
 
